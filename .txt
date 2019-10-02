@@ -1,0 +1,135 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using LitJson;
+
+public class JsonTest : MonoBehaviour
+{
+
+    private string jsonStr = "{'name':'1','age':50,'gender':'2','skill':'3'}";
+
+	// Use this for initialization
+	void Start ()
+	{
+	    //ParJson();
+	    //ParJson2();
+	    //CreateJson();
+	    CreateJson02();
+	}
+    /// <summary>
+  
+    /// </summary>
+    private void ParJson()
+    {
+        string jsonStr = "[{'name':'1','age':50,'gender':'1','skill':'1'}," +
+                         "{'name':'2','age':500,'gender':'2','skill':'2'}," +
+                         "{'name':'3','age':23,'gender':'3','skill':'3'}," +
+                         "{'name':'4','age':500,'gender':'4','skill':'4'}]";
+        TravelWestPerson[] quJingRens = JsonMapper.ToObject<TravelWestPerson[]>(jsonStr);
+
+        if (quJingRens != null)
+        {
+            for (int i = 0;i<quJingRens.Length;i++)
+            {
+                Debug.Log(quJingRens[i].name+"  "+quJingRens[i].age+"  "+quJingRens[i].gender+"  "+quJingRens[i].skill);
+            }
+        }
+
+    }
+    /// <summary>
+    /// 第二种解析方式
+    /// </summary>
+    private void ParJson2()
+    {
+        string jsonStr = "[{'name':'1','age':50,'gender':'1','skill':'1'}," +
+                         "{'name':'2','age':500,'gender':'2','skill':'2'}," +
+                         "{'name':'3','age':23,'gender':'3','skill':'3'}," +
+                         "{'name':'4','age':500,'gender':'4','skill':'4'}]";
+
+        JsonData datas = JsonMapper.ToObject(jsonStr);
+
+        for (int i=0;i<datas.Count;i++)
+        {
+           JsonData data =  datas[i];
+        
+           Debug.Log(data["name"]+"  "+data["age"]+" "+data["gender"]+" "+data["skill"]);
+        }
+    }
+
+    /// <summary>
+    /// create a json object
+    /// </summary>
+    private void CreateJson()
+    {
+      
+        TravelWestPerson baiLongMa = new TravelWestPerson("a",500,"d","c");
+      
+        string jsonStr = JsonMapper.ToJson(baiLongMa);
+
+        Debug.Log(jsonStr);
+
+    }
+    /// <summary>
+    /// 创建多个对象的Json
+    /// </summary>
+    private void CreateJson02()
+    {
+        string[] names = new string[] {"a","b","c"};
+
+        int[] ages = new int [] {500,3,5000};
+
+        string[] genders= new string[] {"w","f","d"};
+
+        string[] skills = new string[] {"d","d","d"};
+
+       
+        JsonData data = new JsonData();
+        
+        data.SetJsonType(JsonType.Array);
+
+        for(int i=0;i<names.Length;i++)
+        {
+            //find a object
+            JsonData personData = new JsonData();
+            //give it information
+            personData["name"] = names[i];
+            personData["age"] = ages[i];
+            personData["gender"] = genders[i];
+            personData["skill"] = skills[i];
+
+            data.Add(personData);
+        }
+
+        string strJson = data.ToJson();
+
+        Debug.Log(strJson);
+
+
+    }
+
+    // Update is called once per frame
+	void Update ()
+    {
+		
+	}
+}
+
+internal class TravelWestPerson
+{
+    public string name;
+    public int age;
+    public string gender;
+    public string skill;
+
+    public TravelWestPerson(string name,int age,string gender,string skill)
+    {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.skill = skill;
+    }
+
+    public TravelWestPerson()
+    {
+    }
+}
